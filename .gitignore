@@ -1,0 +1,5 @@
+/.venv
+/card.py
+/mnist.py
+/requirements.txt
+/test.py

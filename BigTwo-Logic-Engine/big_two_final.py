@@ -29,7 +29,18 @@ class Card:
 class Hand:
     SINGLE, PAIR, STRAIGHT, FULL_HOUSE, INVALID = 1, 2, 4, 6, -1
 
+    # --- 在 Hand 類別的 __init__ 裡面 ---
+
+class Hand:
     def __init__(self, cards):
+        # ⭐ 新增這一段：防禦性程式設計 (Defensive Programming)
+        # 檢查傳進來的 Card 物件是否有重複的 (點數與花色皆相同)
+        card_set = set((c.rank, c.suit) for c in cards)
+        if len(card_set) != len(cards):
+            self.hand_type = self.INVALID
+            self.cards = []
+            return
+
         self.cards = sorted(cards)
         self.hand_type = self.INVALID
         self.top_card = None
@@ -225,22 +236,28 @@ class HumanPlayer(Player):
                 return None
 
             # 2. 驗證輸入格式 (防呆機制)
+            # --- 在 HumanPlayer.find_valid_move 裡面 ---
+
             try:
                 # 將輸入轉為整數列表
                 indices = [int(i.strip()) for i in user_input.split(',') if i.strip().isdigit()]
                 
-                # 檢查是否輸入了空內容或非數字
                 if not indices:
                     print("❌ 錯誤：請輸入有效的數字索引！")
                     continue
+
+                # ⭐ 新增這一段：檢查是否輸入了重複的索引
+                if len(set(indices)) != len(indices):
+                    print("❌ 錯誤：請勿輸入重複的索引（一張牌不能出兩次）！")
+                    continue
                 
-                # 檢查索引是否超出範圍 (Out of bounds)
+                # 檢查索引是否超出範圍
                 if any(i < 0 or i >= len(self.hand) for i in indices):
                     print(f"❌ 錯誤：索引超出範圍！請輸入 0 到 {len(self.hand)-1} 之間的數字。")
                     continue
                 
-                # 選出對應的卡片
                 selected_cards = [self.hand[i] for i in indices]
+                
                 
             except ValueError:
                 print("❌ 錯誤：輸入格式不正確，請使用數字與逗號。")
