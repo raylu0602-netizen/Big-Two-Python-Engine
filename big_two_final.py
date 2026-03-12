@@ -25,13 +25,8 @@ class Card:
     def __eq__(self, other):
         return isinstance(other, Card) and self.rank == other.rank and self.suit == other.suit
 
-# --- 核心類別：Hand (牌型判定) ---
 class Hand:
     SINGLE, PAIR, STRAIGHT, FULL_HOUSE, INVALID = 1, 2, 4, 6, -1
-
-    # --- 在 Hand 類別的 __init__ 裡面 ---
-
-class Hand:
     def __init__(self, cards):
         # ⭐ 新增這一段：防禦性程式設計 (Defensive Programming)
         # 檢查傳進來的 Card 物件是否有重複的 (點數與花色皆相同)
